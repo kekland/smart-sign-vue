@@ -2,12 +2,16 @@
   <div class='col-md-3' id='info-block'>
     <h3>Info</h3>
     <hr>
+    <div>{{type}}</div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "right-pane"
+  name: 'right-pane',
+  props: {
+    type: String,
+  },
 };
 </script>
 

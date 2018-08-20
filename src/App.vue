@@ -4,7 +4,7 @@
                 <div class='col-md-9' id='map-block'>
                   <div id='map' style='width: 100%; height: 100vh'></div>
                 </div>
-                <right-pane></right-pane>
+                <right-pane :type="openedType"></right-pane>
             </div>
         </div>
 </template>
@@ -28,6 +28,7 @@ export default {
   data: () => ({
     map: {},
     icons: [],
+    openedType: () => '',
   }),
   created() {
     this.createMap();
@@ -42,11 +43,6 @@ export default {
           zoom: 17,
           controls: [],
         });
-        map.controls.add(
-          new ymaps.control.ZoomControl({
-            options: { position: { left: 10, top: 90 } },
-          }),
-        );
         this.$data.map = map;
       });
     },
@@ -55,7 +51,7 @@ export default {
       const place = new ymaps.Placemark(
         [lat, lng],
         {
-          balloonContent: '<div>Facebook</div>',
+          balloonContent: `<div>${lat}, ${lng}</div>`,
         },
         {
           iconLayout: 'default#image',
@@ -63,22 +59,20 @@ export default {
           iconImageSize: [50, 50],
         },
       );
-      place.events.add('click', this.up);
+      place.events.add('click', () => this.up(lat));
       return place;
     },
 
-    up() {
+    up(type) {
       const map = this.$data.map;
       const updates = {};
-      updates['sign/sign1/icon'] =
-        'https://image.flaticon.com/icons/svg/515/515018.svg';
+      this.$data.openedType = type;
       database.ref().update(updates);
     },
 
     saveData(snapshot) {
       const value = snapshot.val();
       Object.entries(value).map(([key, v]) => {
-        console.log(v);
         this.$data.map.geoObjects.add(
           this.createPlacemark(v.lat, v.lng, v.icon),
         );
