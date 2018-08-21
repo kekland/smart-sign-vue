@@ -4,7 +4,7 @@
       <div id='map-block'>
         <div id='map' style='width: 100vw; height: 100vh'></div>
       </div>
-      <right-pane :data=paneData :onOpenModal="openSignTypeModal"></right-pane>
+      <right-pane :data=paneData :onOpenModal="openSignTypeModal" :visible=paneVisible></right-pane>
     </div>
     <modal-sign-type :signs=signTypes :open=modalOpen
                      :onClose="function() {modalOpen=false}"
@@ -33,6 +33,7 @@ export default {
     icons: [],
     signTypes: {},
     paneData: {},
+    paneVisible: false,
     modalOpen: false,
   }),
   created() {
@@ -85,17 +86,21 @@ export default {
         },
       );
 
-      placemark.events.add('click', () => this.onPlacemarkPress(filledData));
       placemark.events.add('balloonclose', () => this.onPlacemarkClose());
+      placemark.events.add('balloonopen', () => this.onPlacemarkPress(filledData));
 
       this.$data.map.geoObjects.add(placemark);
     },
     onPlacemarkPress(data) {
-      this.$data.paneData.visible = true;
+      console.log('show!');
+      this.$data.paneVisible = true;
       this.$data.paneData = data;
+      console.log('ayy', this.$data.paneVisible);
     },
     onPlacemarkClose() {
-      this.$data.paneData.visible = false;
+      console.log('hide!');
+      this.$data.paneVisible = false;
+      console.log('ayy', this.$data.paneVisible);
     },
 
     loadedData(snapshot) {

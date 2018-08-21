@@ -5,12 +5,12 @@
       <div class="modal-content">
         <div id="topRow">
           <div id='searchBar'>
-            <input type="text" id='search' placeholder='Search for sign'>
+            <input type="text" id='search' placeholder='Search for sign' autocomplete="off" v-model='query'>
           </div>
           <span id="close" v-on:click="close()">&times;</span>
         </div>
         <div id='signs'>
-          <sign-type v-for="(sign, key) in signs"
+          <sign-type v-for="(sign, key) in displayedSigns"
                      :key=key :data=sign v-on:click.native="change(key)"></sign-type>
         </div>
       </div>
@@ -22,10 +22,26 @@ export default {
   name: 'modal-sign-type',
   props: {
     signs: Object,
-    displayedSigns: Array,
     open: Boolean,
     onClose: Function,
     onChange: Function,
+  },
+  data: () => ({
+    query: '',
+  }),
+  computed: {
+    displayedSigns() {
+      const query = this.$data.query;
+      const signs = this.$props.signs;
+
+      const result = {};
+      Object.entries(signs).forEach(([k, v]) => {
+        if (v.description.toLowerCase().includes(query.toLowerCase().trim())) {
+          result[k] = v;
+        }
+      });
+      return result;
+    },
   },
   methods: {
     close() {
