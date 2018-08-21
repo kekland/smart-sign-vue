@@ -4,7 +4,7 @@
                 <div class='col-md-9' id='map-block'>
                   <div id='map' style='width: 100%; height: 100vh'></div>
                 </div>
-                <right-pane :type="openedType"></right-pane>
+                <right-pane :data=paneData></right-pane>
             </div>
         </div>
 </template>
@@ -28,14 +28,18 @@ export default {
   data: () => ({
     map: {},
     icons: [],
-    openedType: () => '',
+    signTypes: {},
+    paneData: {},
   }),
   created() {
     this.createMap();
   },
   methods: {
     createMap() {
-      database.ref('sign').on('value', this.saveData);
+      database.ref('sign-types').once('value').then((snapshot) => {
+        this.$data.signTypes = snapshot.val();
+        return database.ref('signs').on('value', this.loadedData);
+      });
 
       ymaps.ready(() => {
         const map = new window.ymaps.Map('map', {
@@ -47,36 +51,37 @@ export default {
       });
     },
 
-    createPlacemark(lat, lng, icon) {
-      const place = new ymaps.Placemark(
-        [lat, lng],
+    async createPlacemark(data) {
+      const filledData = data;
+      filledData.description = this.$data.signTypes[filledData.type].description;
+      filledData.imageHref = this.$data.signTypes[filledData.type].image;
+
+      const street = await ymaps.geocode([filledData.lat, filledData.lng], { kind: 'street' });
+      filledData.address = street.geoObjects.get(0).getAddressLine();
+
+      const placemark = new ymaps.Placemark(
+        [data.lat, data.lng],
         {
-          balloonContent: `<div>${lat}, ${lng}</div>`,
+          balloonContent: `<div>${filledData.type}</div>`,
         },
         {
           iconLayout: 'default#image',
-          iconImageHref: icon,
+          iconImageHref: filledData.imageHref,
           iconImageSize: [50, 50],
         },
       );
-      place.events.add('click', () => this.up(lat));
-      return place;
+
+      placemark.events.add('click', () => this.onPlacemarkPress(filledData));
+
+      this.$data.map.geoObjects.add(placemark);
+    },
+    onPlacemarkPress(data) {
+      this.$data.paneData = data;
     },
 
-    up(type) {
-      const map = this.$data.map;
-      const updates = {};
-      this.$data.openedType = type;
-      database.ref().update(updates);
-    },
-
-    saveData(snapshot) {
+    loadedData(snapshot) {
       const value = snapshot.val();
-      Object.entries(value).map(([key, v]) => {
-        this.$data.map.geoObjects.add(
-          this.createPlacemark(v.lat, v.lng, v.icon),
-        );
-      });
+      Object.entries(value).forEach(([, v]) => this.createPlacemark(v));
     },
   },
 };
@@ -87,5 +92,4 @@ export default {
   padding-left: 0;
   padding-right: 0;
 }
-
 </style>
