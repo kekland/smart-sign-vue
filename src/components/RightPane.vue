@@ -1,12 +1,12 @@
 <template>
-  <div class='col-md-3' id='info-block'>
-    <h3>Info</h3>
+  <div id='info-block'>
+    <h3>Sign</h3>
     <hr>
     <info-object title='Address' :text=data.address imgHref='https://image.flaticon.com/icons/svg/149/149984.svg'></info-object>
     <hr>
     <info-object title='Type' :text=data.description imgHref='https://image.flaticon.com/icons/svg/76/76977.svg'></info-object>
     <hr>
-    <round-button label='Change sign type' bgColor='#EF5350'></round-button>
+    <round-button label='Change sign type' bgColor='#EF5350' :onPressed="openModal"></round-button>
   </div>
 </template>
 
@@ -23,6 +23,13 @@ export default {
         };
       },
     },
+    onOpenModal: Function,
+  },
+  methods: {
+    openModal() {
+      console.log('opening modal');
+      this.onOpenModal();
+    },
   },
 };
 </script>
@@ -34,6 +41,9 @@ export default {
   background-color: #fff;
 
   padding: 16px;
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
 }
 
 #info-block:hover {

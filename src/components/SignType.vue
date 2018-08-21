@@ -1,8 +1,10 @@
 <template>
-  <div id='sign'>
-    <div id='signImage' :style="{'background-image':'url(' + data.image + ')'}"></div>
-    <span id='description'>{{data.description}}</span>
-  </div>
+  <ripple>
+    <div id='sign'>
+      <div id='signImage' :style="{'background-image':'url(' + data.image + ')'}"></div>
+      <span id='description'>{{data.description}}</span>
+    </div>
+  </ripple>
 </template>
 
 <script>
@@ -29,6 +31,7 @@ export default {
   width: 64px;
   height: 64px;
   border-radius: 50%;
+  margin-bottom: 8px;
 }
 #description {
   text-align: center;

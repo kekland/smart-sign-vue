@@ -1,12 +1,14 @@
 <template>
   <div class='container-fluid'>
-      <div class='row'>
-        <div class='col-md-9' id='map-block'>
-        <div id='map' style='width: 100%; height: 100vh'></div>
+    <div class='row'>
+      <div id='map-block'>
+        <div id='map' style='width: 100vw; height: 100vh'></div>
       </div>
-      <right-pane :data=paneData></right-pane>
+      <right-pane :data=paneData :onOpenModal="openSignTypeModal"></right-pane>
     </div>
-    <modal-sign-type :signs=signTypes></modal-sign-type>
+    <modal-sign-type :signs=signTypes :open=modalOpen
+                     :onClose="function() {modalOpen=false}"
+                     :onChange="onSignTypeModalChange"></modal-sign-type>
   </div>
 </template>
 
@@ -31,11 +33,21 @@ export default {
     icons: [],
     signTypes: {},
     paneData: {},
+    modalOpen: false,
   }),
   created() {
     this.createMap();
   },
   methods: {
+    openSignTypeModal() {
+      console.log('hi!');
+      this.$data.modalOpen = true;
+    },
+
+    onSignTypeModalChange(type) {
+      database.ref(`signs/${this.$data.paneData.databaseKey}/type`).set(type);
+    },
+
     createMap() {
       database.ref('sign-types').once('value').then((snapshot) => {
         this.$data.signTypes = snapshot.val();
@@ -52,8 +64,9 @@ export default {
       });
     },
 
-    async createPlacemark(data) {
+    async createPlacemark(key, data) {
       const filledData = data;
+      filledData.databaseKey = key;
       filledData.description = this.$data.signTypes[filledData.type].description;
       filledData.imageHref = this.$data.signTypes[filledData.type].image;
 
@@ -81,8 +94,9 @@ export default {
     },
 
     loadedData(snapshot) {
+      this.$data.map.geoObjects.removeAll();
       const value = snapshot.val();
-      Object.entries(value).forEach(([, v]) => this.createPlacemark(v));
+      Object.entries(value).forEach(([k, v]) => this.createPlacemark(k, v));
     },
   },
 };
@@ -90,7 +104,7 @@ export default {
 
 <style>
 #map-block {
-  padding-left: 0;
-  padding-right: 0;
+  width: 100vw;
+  height: 100vh;
 }
 </style>

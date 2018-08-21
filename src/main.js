@@ -8,6 +8,7 @@ import RoundButton from './components/RoundButton';
 import InfoObject from './components/InfoObject';
 import ModalSignType from './components/ModalSignType';
 import SignType from './components/SignType';
+import Ripple from './components/Ripple';
 
 Vue.config.productionTip = false;
 Vue.component('right-pane', RightPane);
@@ -16,6 +17,7 @@ Vue.component('info-object', InfoObject);
 Vue.component('round-button', RoundButton);
 Vue.component('modal-sign-type', ModalSignType);
 Vue.component('sign-type', SignType);
+Vue.component('ripple', Ripple);
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

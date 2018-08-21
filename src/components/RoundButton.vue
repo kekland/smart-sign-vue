@@ -1,6 +1,8 @@
 <template>
-  <div id='btn' :style="{'background-color': bgColor,}">
-    <span id='label'>{{label}}</span>
+  <div id='btn' :style="{'background-color': bgColor,}" v-on:click="pressed()">
+    <ripple id='ripple'>
+      <span id='label'>{{label}}</span>
+    </ripple>
   </div>
 </template>
 
@@ -12,18 +14,26 @@ export default {
     bgColor: String,
     onPressed: Function,
   },
+  methods: {
+    pressed() {
+      this.onPressed();
+    },
+  },
 };
 </script>
 
 <style>
+#ripple {
+  padding-left: 8px;
+  padding-right: 8px;
+  border-radius: 18px;
+}
 #btn {
   height: 36px;
   color: white;
   text-align: center;
   border-radius: 18px;
   line-height: 36px;
-  padding-left: 8px;
-  padding-right: 8px;
   box-shadow: 0 0px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
