@@ -4,8 +4,9 @@
     <hr>
     <info-object title='Address' :text=data.address imgHref='https://image.flaticon.com/icons/svg/149/149984.svg'></info-object>
     <hr>
-    <info-object title='Type' style='margin-bottom:4px;' :text=data.description imgHref='https://image.flaticon.com/icons/svg/76/76977.svg'></info-object>
-    <round-button label='Change type' bgColor='#EF5350'></round-button>
+    <info-object title='Type' :text=data.description imgHref='https://image.flaticon.com/icons/svg/76/76977.svg'></info-object>
+    <hr>
+    <round-button label='Change sign type' bgColor='#EF5350'></round-button>
   </div>
 </template>
 

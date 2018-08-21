@@ -1,12 +1,12 @@
 <template>
-        <div class='container-fluid'>
-            <div class='row'>
-                <div class='col-md-9' id='map-block'>
-                  <div id='map' style='width: 100%; height: 100vh'></div>
-                </div>
-                <right-pane :data=paneData></right-pane>
-            </div>
-        </div>
+  <div class='container-fluid'>
+      <div class='row'>
+        <div class='col-md-9' id='map-block'>
+        <div id='map' style='width: 100%; height: 100vh'></div>
+      </div>
+      <right-pane :data=paneData></right-pane>
+    </div>
+  </div>
 </template>
 
 <script>
