@@ -1,5 +1,5 @@
 <template>
-  <div id='info-block'>
+  <div id='info-block' :style="{'opacity': (isVisible)? '1' : '0', 'visibility': (isVisible)? 'visible' : 'hidden'}">
     <h3>Sign</h3>
     <hr>
     <info-object title='Address' :text=data.address imgHref='https://image.flaticon.com/icons/svg/149/149984.svg'></info-object>
@@ -14,16 +14,13 @@
 export default {
   name: 'right-pane',
   props: {
-    data: {
-      type: Object,
-      default() {
-        return {
-          address: 'None',
-          description: 'None',
-        };
-      },
-    },
+    data: Object,
     onOpenModal: Function,
+  },
+  computed: {
+    isVisible() {
+      return this.$data.data.address == null;
+    },
   },
   methods: {
     openModal() {
