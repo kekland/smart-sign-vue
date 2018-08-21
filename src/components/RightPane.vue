@@ -1,5 +1,5 @@
 <template>
-  <div id='info-block' :style="{'opacity': (isVisible)? '1' : '0', 'visibility': (isVisible)? 'visible' : 'hidden'}">
+  <div id='info-block' :style="{'opacity': (data.visible)? '1' : '0', 'visibility': (data.visible)? 'visible' : 'hidden'}">
     <h3>Sign</h3>
     <hr>
     <info-object title='Address' :text=data.address imgHref='https://image.flaticon.com/icons/svg/149/149984.svg'></info-object>
@@ -16,11 +16,6 @@ export default {
   props: {
     data: Object,
     onOpenModal: Function,
-  },
-  computed: {
-    isVisible() {
-      return !(this.$props.data === null || this.$props.data.address === null);
-    },
   },
   methods: {
     openModal() {

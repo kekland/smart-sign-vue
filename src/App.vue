@@ -91,10 +91,11 @@ export default {
       this.$data.map.geoObjects.add(placemark);
     },
     onPlacemarkPress(data) {
+      this.$data.paneData.visible = true;
       this.$data.paneData = data;
     },
     onPlacemarkClose() {
-      this.$data.paneData = {};
+      this.$data.paneData.visible = false;
     },
 
     loadedData(snapshot) {
