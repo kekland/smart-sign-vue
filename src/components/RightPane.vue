@@ -19,7 +19,7 @@ export default {
   },
   computed: {
     isVisible() {
-      return this.$data.data.address == null;
+      return !(this.$props.data === null || this.$props.data.address === null);
     },
   },
   methods: {

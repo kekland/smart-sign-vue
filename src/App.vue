@@ -76,7 +76,7 @@ export default {
       const placemark = new ymaps.Placemark(
         [data.lat, data.lng],
         {
-          balloonContent: `<div>${filledData.type}</div>`,
+          balloonContent: `<div>${filledData.description} sign at ${filledData.address}</div>`,
         },
         {
           iconLayout: 'default#image',
@@ -86,11 +86,15 @@ export default {
       );
 
       placemark.events.add('click', () => this.onPlacemarkPress(filledData));
+      placemark.events.add('balloonclose', () => this.onPlacemarkClose());
 
       this.$data.map.geoObjects.add(placemark);
     },
     onPlacemarkPress(data) {
       this.$data.paneData = data;
+    },
+    onPlacemarkClose() {
+      this.$data.paneData = {};
     },
 
     loadedData(snapshot) {
