@@ -6,6 +6,7 @@
       </div>
       <right-pane :data=paneData></right-pane>
     </div>
+    <modal-sign-type :signs=signTypes></modal-sign-type>
   </div>
 </template>
 
